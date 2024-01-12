@@ -1,13 +1,6 @@
 import requests
 import json
 
-# Replace 'YOUR_API_TOKEN' with your actual PagerDuty API token
-api_token = 'YOUR_API_TOKEN'
-# Replace 'YOUR_SERVICE_ID' with the actual service ID where the incidents should be created
-service_id = 'YOUR_SERVICE_ID'
-# Replace 'MESSAGE' with the actual incident message
-message_copy = 'MESSAGE'
-
 headers = {
     'Content-Type': 'application/json',
     'Authorization': f'Token token={api_token}'
@@ -20,12 +13,14 @@ incidents_endpoint = 'https://api.pagerduty.com/incidents'
 
 
 def get_pagerduty_members():
-    response = requests.get(members_endpoint, headers=headers)
+    params = {'offset': 0, 'limit': 100}
+    response = requests.get(members_endpoint, headers=headers, params=params)
     if response.status_code == 200:
         return response.json()['users']
     else:
         print(f"Failed to retrieve PagerDuty members. Status code: {response.status_code}, Error: {response.text}")
         return None
+
 
 def create_incident_for_member(member_id, service_id, summary):
     payload = {
@@ -52,11 +47,25 @@ def create_incident_for_member(member_id, service_id, summary):
     if response.status_code == 201:
         print(f"Incident created successfully for member {member_id}. Incident ID: {response.json()['incident']['id']}")
     else:
-        print(f"Failed to create incident for member {member_id}. Status code: {response.status_code}, Error: {response.text}")
+        print(
+            f"Failed to create incident for member {member_id}. Status code: {response.status_code}, Error: {response.text}")
+
 
 # Example usage
 members = get_pagerduty_members()
-print(members)
-# if members:
-#     for member in members:
-#         create_incident_for_member(member['id'], service_id, message_copy)
+print("Original Size: " + str(len(members)))
+# Exclude the US oncall members
+if members:
+    # Create a new list excluding members with specific IDs
+    members = [member for member in members if member['id'] not in US_ONCall]
+print("Final Size: " + str(len(members)))
+
+# Start create incidents for each member
+print(">>>>>>>>>>>>>>>>> Start the PagerDuty Test Work >>>>>>>>>>>>>>>>>")
+if members:
+    for member in members:
+        print(member['id'] + '\t' + member['name'])
+        # create_incident_for_member(member['id'], service_id, message_copy + member['name'])
+
+print("<<<<<<<<<<<<<<<<< PagerDuty Test Work Finished <<<<<<<<<<<<<<<<<")
+print("Notify Size: " + str(len(members)))
