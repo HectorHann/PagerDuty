@@ -1,9 +1,10 @@
 import requests
 import json
+import Constant
 
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': f'Token token={api_token}'
+    'Authorization': f'Token token={Constant.API_TOKEN}'
 }
 
 # Replace with your PagerDuty members API endpoint
@@ -57,7 +58,7 @@ print("Original Size: " + str(len(members)))
 # Exclude the US oncall members
 if members:
     # Create a new list excluding members with specific IDs
-    members = [member for member in members if member['id'] not in US_ONCall]
+    members = [member for member in members if member['id'] not in Constant.US_ONCALL]
 print("Final Size: " + str(len(members)))
 
 # Start create incidents for each member
@@ -65,7 +66,7 @@ print(">>>>>>>>>>>>>>>>> Start the PagerDuty Test Work >>>>>>>>>>>>>>>>>")
 if members:
     for member in members:
         print(member['id'] + '\t' + member['name'])
-        # create_incident_for_member(member['id'], service_id, message_copy + member['name'])
+        # create_incident_for_member(member['id'], Constant.SERVICE_ID, Constant.INCIDENT_TITILE + member['name'])
 
 print("<<<<<<<<<<<<<<<<< PagerDuty Test Work Finished <<<<<<<<<<<<<<<<<")
 print("Notify Size: " + str(len(members)))
