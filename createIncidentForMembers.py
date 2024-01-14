@@ -66,7 +66,7 @@ print(">>>>>>>>>>>>>>>>> Start the PagerDuty Test Work >>>>>>>>>>>>>>>>>")
 if members:
     for member in members:
         print(member['id'] + '\t' + member['name'])
-        # create_incident_for_member(member['id'], Constant.SERVICE_ID, Constant.INCIDENT_TITILE + member['name'])
+        create_incident_for_member(member['id'], Constant.SERVICE_ID, Constant.INCIDENT_TITLE + member['name'])
 
 print("<<<<<<<<<<<<<<<<< PagerDuty Test Work Finished <<<<<<<<<<<<<<<<<")
 print("Notify Size: " + str(len(members)))
