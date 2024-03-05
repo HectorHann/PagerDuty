@@ -1,7 +1,11 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # Replace with US engineer PagerDuty user id
 US_ONCALL = {"PLDL2XZ", "PW720LE", "P7QVCB2", "P47X15V", "PSXE09R", "PZS4YUO", "P4H9RZO", "PZO34BO", "P4OYULV"}
 # Replace with your actual PagerDuty API token
-API_TOKEN = 'u+mg44nvL2apshyzRo7w'
+API_TOKEN = os.getenv("API_TOKEN")
 # Replace with the actual service ID where the incidents should be created
 SERVICE_ID = 'P8CDHXU'
 # Replace with the actual incident message
